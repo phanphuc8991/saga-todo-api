@@ -1,26 +1,25 @@
-const ProjectModel = require("../models/Project");
+const TodoModel = require("../models/Todo");
 const CryptoJS = require("crypto-js");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const Project = {
+const Todo = {
   // create.
   create: async (req, res) => {
-    const newProject = new ProjectModel(req.body);
+    const todoModel = new TodoModel(req.body);
     try {
-      const savedProject = await newProject.save();
-      res.status(201).json(savedProject);
+      const savedTodo = await todoModel.save();
+      res.status(201).json(savedTodo);
     } catch (error) {
       res.status(500).json(error);
     }
   },
 
-  // get. => userId
+  // get
   get: async (req, res) => {
-    console.log("req", req);
     try {
-      const project = await ProjectModel.findById(req.params.id);
-      res.status(200).json(project);
+      const originalTodo = await TodoModel.findById(req.params.id);
+      res.status(200).json(originalTodo);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -29,8 +28,8 @@ const Project = {
   // get all.
   getAll: async (req, res) => {
     try {
-      const projects = await ProjectModel.find({});
-      res.status(200).json(projects);
+      const todos = await TodoModel.find({});
+      res.status(200).json(todos);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -39,7 +38,7 @@ const Project = {
   // update
   update: async (req, res) => {
     try {
-      const updateProject = await ProjectModel.findByIdAndUpdate(
+      const updateTodo = await TodoModel.findByIdAndUpdate(
         req.params.id,
         {
           $set: req.body,
@@ -47,7 +46,7 @@ const Project = {
         { new: true }
       );
 
-      res.status(200).json(updateProject);
+      res.status(200).json(updateTodo);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -56,12 +55,12 @@ const Project = {
   // delete.
   delete: async (req, res) => {
     try {
-      await ProjectModel.findByIdAndDelete(req.params.id);
-      res.status(200).json("Project has been deleted...");
+      await TodoModel.findByIdAndDelete(req.params.id);
+      res.status(200).json("Todo has been deleted...");
     } catch (error) {
       res.status(500).json(error);
     }
   },
 };
 
-module.exports = Project;
+module.exports = Todo;
